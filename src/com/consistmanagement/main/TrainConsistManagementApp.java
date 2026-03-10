@@ -1,38 +1,39 @@
 package com.consistmanagement.main;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 5 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 6 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 5: Preserve Insertion Order of Bogies
+ * Use Case 6: Map Bogie to Capacity (Hash Map)
  * 
- * Description: This class maintains the exact attachment order
- * of bogies while also preventing duplicate entries using
- * LinkedHashSet.
+ * Description: This class associates each bogie with its seating
+ * or load capacity using key-value mapping structure.
  * 
  * At this stage, the application:
- * 	- Attaches bogies in order
- *  - Preserves Insertion sequence
- *  - Avoids duplicate bogies
- *  - Displays final train formation
+ * 	- Creates a HashMap for bogie capacity mapping
+ *  - Inserts capacity values for each bogie
+ *  - Iterates through map entries
+ *  - Displays bogie and capacity information
  * 
- * This maps positional operations using LinkedList.
+ * This maps lookup based access HashMap.
  * 
  * @author Developer
- * @version 5.0
+ * @version 6.0
  */
 
 public class TrainConsistManagementApp {
 	/**
-	 * Main entry point for UC5
+	 * Main entry point for UC6
 	 * 
 	 * @param args
 	 */
@@ -41,10 +42,10 @@ public class TrainConsistManagementApp {
 		System.out.println(" === Train Consist Management App === ");
 		System.out.println("======================================");
 
-		Set<String> trainConsist = new LinkedHashSet<String>();
+		Map<String, Integer> capacityMap = new HashMap<String, Integer>();
 
 		System.out.println("Train initialized successfully.....");
-		System.out.println("Initial Bogie Count: " + trainConsist.size());
+		System.out.println("Initial Bogie Count: " + capacityMap.size());
 
 		Scanner scanner = new Scanner(System.in);
 		String choice;
@@ -64,18 +65,18 @@ public class TrainConsistManagementApp {
 					System.out.println("Adding Bogies");
 					System.out.println("Enter bogie name to add: ");
 					String bogie = scanner.nextLine();
-					if (trainConsist.add(bogie)) {
-						System.out.println(bogie + " added successfully");
-					} else {
-						System.out.println("Bogie already exists");
-					}
+					System.out.println("Enter the capacity of the bogie: ");
+					int capacity = scanner.nextInt();
+					scanner.nextLine();
+					capacityMap.put(bogie, capacity);
+					System.out.println(bogie + " with capacity " + capacity + " added successfully");
 				}
 				case "2" -> {
 					System.out.println("Removing bogies");
 					System.out.println("Enter bogie name to remove: ");
 					String bogie = scanner.nextLine();
-					if (trainConsist.contains(bogie)) {
-						trainConsist.remove(bogie);
+					if (capacityMap.containsKey(bogie)) {
+						capacityMap.remove(bogie);
 						System.out.println(bogie + " removed successfully");
 					} else {
 						System.out.println("Bogie not found");
@@ -84,7 +85,7 @@ public class TrainConsistManagementApp {
 				case "3" -> {
 					System.out.println("Enter bogie name: ");
 					String bogie = scanner.nextLine();
-					if (trainConsist.contains(bogie)) {
+					if (capacityMap.containsKey(bogie)) {
 						System.out.println("Bogie exists");
 					} else {
 						System.out.println("Bogie doesn't exist");
@@ -92,7 +93,9 @@ public class TrainConsistManagementApp {
 				}
 				case "4" -> {
 					System.out.println("Displaying consist");
-					System.out.println(trainConsist);
+					for (Map.Entry<String, Integer> entry : capacityMap.entrySet()) {
+						System.out.println(entry.getKey() + ": " + entry.getValue());
+					}
 				}
 				case "0" -> {
 					System.out.println("EXITING");
