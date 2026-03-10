@@ -1,31 +1,35 @@
 package com.consistmanagement.main;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 2 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 3 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 2: Add Passenger Bogies to Train
+ * Use Case 3: Track Unique Bogie IDs
  * 
- * Description: This class demonstrates how passenger bogies can be managed
- * dynamically using ArrayList operations.
+ * Description: This class ensures that duplicate bogie IDs are not added into
+ * the train formation using HashSet.
  * 
- * At this stage, the application: - Adds new Bogies to the train - Removes
- * existing bogies - Checks for bogie availability - Displays the final consist
+ * At this stage, the application:
+ * 	- Store bogie IDs
+ *  - Prevents duplicates automatically
+ *  - Displays unique bogie identifiers
  * 
- * This maps CRUD operations to ArrayList
+ * This maps uniqueness validation using Set.
  * 
- * @author Development
- * @version 2.0
+ * @author Developer
+ * @version 3.0
  */
 
 public class TrainConsistManagementApp {
 	/**
-	 * Main entry point for UC2
+	 * Main entry point for UC3
 	 * 
 	 * @param args
 	 */
@@ -34,7 +38,7 @@ public class TrainConsistManagementApp {
 		System.out.println(" === Train Consist Management App === ");
 		System.out.println("======================================");
 
-		List<String> trainConsist = new ArrayList<String>();
+		Set<String> trainConsist = new HashSet<String>();
 
 		System.out.println("Train initialized successfully.....");
 		System.out.println("Initial Bogie Count: " + trainConsist.size());
@@ -57,7 +61,11 @@ public class TrainConsistManagementApp {
 					System.out.println("Adding Bogies");
 					System.out.println("Enter bogie name to add: ");
 					String bogie = scanner.nextLine();
-					trainConsist.add(bogie);
+					if (trainConsist.add(bogie)) {
+						System.out.println(bogie + " added successfully");
+					} else {
+						System.out.println("Couldn't add bogie");
+					}
 				}
 				case "2" -> {
 					System.out.println("Enter bogie name to remove: ");
