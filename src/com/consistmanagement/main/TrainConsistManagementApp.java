@@ -11,28 +11,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 7 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 8 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 7: Sort Bogies by Capacity (Comparator)
+ * Use Case 8: Filter Passenger Bogies Using Streams
  * 
- * Description: This class sorts passenger bogies based on seating capacity using
- * a custom comparator.
+ * Description: This class filters passenger bogies based on seating capacity using
+ * a Java Streams API.
  * 
  * At this stage, the application:
- * 	- Creates bogie objects
- *  - Stores them in a list
- *  - Displays unsorted array
- *  - Sorts using Comparator logic
- *  - Displays sorted result
+ * 	- Creates a list of bogies.
+ *  - Converts list into stream.
+ *  - Applies filter condition
+ *  - Collects filtered result
+ *  - Displays qualifying result
  * 
- * This maps lookup based access HashMap.
+ * This maps functional filtering using streams.
  * 
  * @author Developer
- * @version 7.0
+ * @version 8.0
  */
 
 public class TrainConsistManagementApp {
@@ -82,6 +83,7 @@ public class TrainConsistManagementApp {
 			System.out.println("3. Check if Bogie Exists");
 			System.out.println("4. Display Consists");
 			System.out.println("5. Sort Bogies");
+			System.out.println("6. Filter Bogies");
 			System.out.println("0. Exit");
 			System.out.print("Enter your Choice: ");
 
@@ -129,6 +131,12 @@ public class TrainConsistManagementApp {
 				case "5" -> {
 					Collections.sort(bogies, Comparator.comparingInt(Bogie::getCapacity));
 					System.out.println("Bogies sorted successfully!!");
+				}
+				case "6" -> {
+					System.out.println("Filtering Bogies with Capacity > 60: ");
+					for(Bogie b : bogies.stream().filter(b -> b.getCapacity() > 60).collect(Collectors.toList())) {
+						System.out.printf("%s -> %s\n", b.getName(), b.getCapacity());
+					}
 				}
 				case "0" -> {
 					System.out.println("EXITING");
