@@ -11,23 +11,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 10 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 11 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 10: Count total seats in train
+ * Use Case 11: Validate Train ID & Cargo Codes (Regex)
  * 
- * Description: This class aggregates seating capacity of all bogies into a single 
- * total using Stream reduce().
+ * Description: This class validates input formats using Regular Expressions.
  * 
 * At this stage, the application:
- * - Creates a list of bogies
- * - Maps bogies to capacity
- * - Reduces values into total
- * - Displays total seat count
+ * - Accepts Train ID input
+ * - Accepts Cargo Code input
+ * - Applies Regex validation
+ * - 
  * 
  * This maps aggregation logic using reduce().
  *  
@@ -57,7 +58,7 @@ public class TrainConsistManagementApp {
 		
 	}
 	/**
-	 * Main entry point for UC10
+	 * Main entry point for UC11
 	 * 
 	 * @param args
 	 */
@@ -89,6 +90,7 @@ public class TrainConsistManagementApp {
 			System.out.println("6. Filter Bogies");
 			System.out.println("7. Group bogies");
 			System.out.println("8. Get total capacity");
+			System.out.println("9. validate Train ID and Cargo ID");
 			System.out.println("0. Exit");
 			System.out.print("Enter your Choice: ");
 
@@ -155,6 +157,23 @@ public class TrainConsistManagementApp {
 				case "8" -> {
 					System.out.println("Total capacity: " + bogies.stream().map(b -> b.getCapacity()).reduce(0, Integer::sum));
 				}
+				case "9" -> {
+					System.out.println("Enter TrainId (Format: TRN-1234): ");
+					String trainId = scanner.nextLine();
+					System.out.println("Enter CargoId (Format: PET-AB");
+					String cargoId = scanner.nextLine();
+					if (validateTrainId(trainId)) {
+						System.out.println("Train Id valid");
+					} else {
+						System.out.println("Train id invlaid");
+					}
+					
+					if (validateCargoId(cargoId)) {
+						System.out.println("Cargo Id valid");
+					} else {
+						System.out.println("Cargo Id invalid");
+					}
+				}
 				case "0" -> {
 					System.out.println("EXITING");
 				}
@@ -166,4 +185,25 @@ public class TrainConsistManagementApp {
 		scanner.close();
 	}
 	
+	private static boolean validateTrainId(String trainId) {
+		final String TRAIN_ID_REGEX = "TRN-\\d4{4}";
+		
+		Pattern trainIdPattern = Pattern.compile(TRAIN_ID_REGEX);
+		Matcher matcher =  trainIdPattern.matcher(trainId);
+		if (matcher.matches()) {
+			return true;
+ 		}
+		return false;
+	}
+	
+	private static boolean validateCargoId(String cargoId) {
+		final String CARGO_ID_REGEX = "PET-[A-Z]{2}";
+		
+		Pattern cargoIdPattern = Pattern.compile(CARGO_ID_REGEX);
+		Matcher matcher = cargoIdPattern.matcher(cargoId);
+		if (matcher.matches()) {
+			return true;
+		}
+		return false;
+	}
 }
