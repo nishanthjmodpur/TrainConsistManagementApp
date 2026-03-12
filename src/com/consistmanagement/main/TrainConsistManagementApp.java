@@ -15,25 +15,24 @@ import java.util.stream.Collectors;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 9 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 10 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 9: Filter Passenger Bogies Using Streams
+ * Use Case 10: Count total seats in train
  * 
- * Description: This class filters passenger bogies based on seating capacity using
- * a Java Streams API.
+ * Description: This class aggregates seating capacity of all bogies into a single 
+ * total using Stream reduce().
  * 
- * At this stage, the application:
- * 	- Creates a list of bogies.
- *  - Converts list into stream.
- *  - Groups bogies by name
- *  - Stores grouped data in a map
- *  - Displays grouped structure.	
+* At this stage, the application:
+ * - Creates a list of bogies
+ * - Maps bogies to capacity
+ * - Reduces values into total
+ * - Displays total seat count
  * 
- * This maps classification logic using groupingBy..
- * 
+ * This maps aggregation logic using reduce().
+ *  
  * @author Developer
- * @version 9.0
+ * @version 10.0
  */
 
 public class TrainConsistManagementApp {
@@ -58,7 +57,7 @@ public class TrainConsistManagementApp {
 		
 	}
 	/**
-	 * Main entry point for UC9
+	 * Main entry point for UC10
 	 * 
 	 * @param args
 	 */
@@ -89,6 +88,7 @@ public class TrainConsistManagementApp {
 			System.out.println("5. Sort Bogies");
 			System.out.println("6. Filter Bogies");
 			System.out.println("7. Group bogies");
+			System.out.println("8. Get total capacity");
 			System.out.println("0. Exit");
 			System.out.print("Enter your Choice: ");
 
@@ -151,6 +151,9 @@ public class TrainConsistManagementApp {
 							System.out.printf("Capacity: %s\n", bogie.getCapacity());
 						}
 					}
+				}
+				case "8" -> {
+					System.out.println("Total capacity: " + bogies.stream().map(b -> b.getCapacity()).reduce(0, Integer::sum));
 				}
 				case "0" -> {
 					System.out.println("EXITING");
