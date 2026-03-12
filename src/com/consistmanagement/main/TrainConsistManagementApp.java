@@ -1,5 +1,8 @@
 package com.consistmanagement.main;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -11,27 +14,48 @@ import java.util.Set;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 6 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 7 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 6: Map Bogie to Capacity (Hash Map)
+ * Use Case 7: Sort Bogies by Capacity (Comparator)
  * 
- * Description: This class associates each bogie with its seating
- * or load capacity using key-value mapping structure.
+ * Description: This class sorts passenger bogies based on seating capacity using
+ * a custom comparator.
  * 
  * At this stage, the application:
- * 	- Creates a HashMap for bogie capacity mapping
- *  - Inserts capacity values for each bogie
- *  - Iterates through map entries
- *  - Displays bogie and capacity information
+ * 	- Creates bogie objects
+ *  - Stores them in a list
+ *  - Displays unsorted array
+ *  - Sorts using Comparator logic
+ *  - Displays sorted result
  * 
  * This maps lookup based access HashMap.
  * 
  * @author Developer
- * @version 6.0
+ * @version 7.0
  */
 
 public class TrainConsistManagementApp {
+	
+	static class Bogie {
+		private String name;
+		private int capacity;
+		
+		public Bogie(String name, int capacity) {
+			this.name = name;
+			this.capacity = capacity;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public int getCapacity() {
+			return capacity;
+		}
+		
+		
+	}
 	/**
 	 * Main entry point for UC6
 	 * 
@@ -42,10 +66,11 @@ public class TrainConsistManagementApp {
 		System.out.println(" === Train Consist Management App === ");
 		System.out.println("======================================");
 
-		Map<String, Integer> capacityMap = new HashMap<String, Integer>();
+		List<Bogie> bogies = new ArrayList<Bogie>();
+//		Map<String, Integer> capacityMap = new HashMap<String, Integer>();
 
 		System.out.println("Train initialized successfully.....");
-		System.out.println("Initial Bogie Count: " + capacityMap.size());
+		System.out.println("Initial Bogie Count: " + bogies.size());
 
 		Scanner scanner = new Scanner(System.in);
 		String choice;
@@ -56,6 +81,7 @@ public class TrainConsistManagementApp {
 			System.out.println("2. Remove Bogies");
 			System.out.println("3. Check if Bogie Exists");
 			System.out.println("4. Display Consists");
+			System.out.println("5. Sort Bogies");
 			System.out.println("0. Exit");
 			System.out.print("Enter your Choice: ");
 
@@ -68,34 +94,41 @@ public class TrainConsistManagementApp {
 					System.out.println("Enter the capacity of the bogie: ");
 					int capacity = scanner.nextInt();
 					scanner.nextLine();
-					capacityMap.put(bogie, capacity);
+					bogies.add(new Bogie(bogie, capacity));
+//					capacityMap.put(bogie, capacity);
 					System.out.println(bogie + " with capacity " + capacity + " added successfully");
 				}
 				case "2" -> {
 					System.out.println("Removing bogies");
 					System.out.println("Enter bogie name to remove: ");
 					String bogie = scanner.nextLine();
-					if (capacityMap.containsKey(bogie)) {
-						capacityMap.remove(bogie);
-						System.out.println(bogie + " removed successfully");
-					} else {
-						System.out.println("Bogie not found");
+					for (Bogie b : bogies) {
+						if (b.getName().equals(bogie)) {
+							bogies.remove(bogie);
+							System.out.println(bogie + " removed successfully");
+						} else {
+							System.out.println("Bogie not found");
+						}
 					}
 				}
 				case "3" -> {
 					System.out.println("Enter bogie name: ");
 					String bogie = scanner.nextLine();
-					if (capacityMap.containsKey(bogie)) {
-						System.out.println("Bogie exists");
-					} else {
-						System.out.println("Bogie doesn't exist");
+					for (Bogie b : bogies) {
+						if (b.getName().equals(bogie)) {
+							System.out.println(bogie + " exists!");
+						}
 					}
 				}
 				case "4" -> {
 					System.out.println("Displaying consist");
-					for (Map.Entry<String, Integer> entry : capacityMap.entrySet()) {
-						System.out.println(entry.getKey() + ": " + entry.getValue());
+					for (Bogie b : bogies) {
+						System.out.println(b.getName() + ": " + b.getCapacity());
 					}
+				}
+				case "5" -> {
+					Collections.sort(bogies, Comparator.comparingInt(Bogie::getCapacity));
+					System.out.println("Bogies sorted successfully!!");
 				}
 				case "0" -> {
 					System.out.println("EXITING");
@@ -107,4 +140,5 @@ public class TrainConsistManagementApp {
 		} while (!choice.equals("0"));
 		scanner.close();
 	}
+	
 }
