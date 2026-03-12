@@ -17,23 +17,24 @@ import java.util.stream.Collectors;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 11 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 12 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 11: Validate Train ID & Cargo Codes (Regex)
+ * Use Case 12: Safety Compliance Check for Goods Bogies
  * 
- * Description: This class validates input formats using Regular Expressions.
+ * Description: This class enforces domain safety rules on goods bogies.
  * 
 * At this stage, the application:
- * - Accepts Train ID input
- * - Accepts Cargo Code input
- * - Applies Regex validation
- * - 
+ * - Creates goods bogie list
+ * - Converts list into stream
+ * - Applies safety validation rule
+ * - Checks compliance using allMatch()
+ * - Displays safety status
  * 
- * This maps aggregation logic using reduce().
+ * This maps real world cargo safety rules using Streams
  *  
  * @author Developer
- * @version 10.0
+ * @version 12.0
  */
 
 public class TrainConsistManagementApp {
@@ -54,11 +55,27 @@ public class TrainConsistManagementApp {
 		public int getCapacity() {
 			return capacity;
 		}
+	}
+	
+	static class GoodsBogie {
+		private String type;
+		private String cargo;
 		
+		public GoodsBogie(String type, String cargo) {
+			this.type = type;
+			this.cargo = cargo;
+		}
 		
+		public String getType() {
+			return type;
+		}
+		
+		public String getCargo() {
+			return cargo;
+		}
 	}
 	/**
-	 * Main entry point for UC11
+	 * Main entry point for UC12
 	 * 
 	 * @param args
 	 */
@@ -174,6 +191,9 @@ public class TrainConsistManagementApp {
 						System.out.println("Cargo Id invalid");
 					}
 				}
+				case "10" -> {
+					cargoTrain(scanner);
+				}
 				case "0" -> {
 					System.out.println("EXITING");
 				}
@@ -183,6 +203,72 @@ public class TrainConsistManagementApp {
 			}
 		} while (!choice.equals("0"));
 		scanner.close();
+	}
+	
+	private static void cargoTrain(Scanner scanner) {
+		List<GoodsBogie> goodsBogies = new ArrayList<TrainConsistManagementApp.GoodsBogie>();
+		
+		String choice;
+		
+		do {
+			System.out.println();
+			System.out.println("1. Add Bogies");
+			System.out.println("2. Remove Bogies");
+			System.out.println("3. Check if Bogie Exists");
+			System.out.println("4. Display Consists");
+			System.out.println("5. Check Cargo compliance");
+			System.out.println("0. Exit");
+			System.out.print("Enter your Choice: ");
+			
+			choice = scanner.nextLine();
+			
+			switch (choice) {
+			case "1" -> {
+				System.out.println("Adding Bogies");
+				System.out.println("Enter bogie name to add: ");
+				String type = scanner.nextLine();
+				System.out.println("Enter the capacity of the bogie: ");
+				String cargo = scanner.nextLine();
+				goodsBogies.add(new GoodsBogie(type, cargo));
+				System.out.println(type + " with capacity " + cargo + " added successfully");
+			}
+			case "2" -> {
+				System.out.println("Removing bogies");
+				System.out.println("Enter bogie name to remove: ");
+				String type = scanner.nextLine();
+				
+				for (GoodsBogie b : goodsBogies) {
+					if (b.getType().equals(type)) {
+						goodsBogies.remove(b);
+						System.out.println(type + " removed successfully");
+					} else {
+						System.out.println("Bogie not found");
+					}
+					}
+				}
+			case "3" -> {
+				System.out.println("Enter bogie name: ");
+				String type = scanner.nextLine();
+				for (GoodsBogie b : goodsBogies) {
+					if (b.getType().equals(type)) {
+						System.out.println(type + " exists!");
+					}
+				}
+			}
+			case "4" -> {
+				System.out.println("Displaying consist");
+				for (GoodsBogie b : goodsBogies) {
+					System.out.println(b.getType() + ": " + b.getCargo());
+				}
+			}
+			case "5" -> {
+				boolean isSafe = goodsBogies.stream().allMatch(b -> b.getType().equalsIgnoreCase("Cylindrical") && b.getCargo().equalsIgnoreCase("Coal"));
+				
+				System.out.println("Safety Complicance Status: " + isSafe);
+				System.out.println("Train formation is " + (isSafe ? "SAFE" : "NOT SAFE"));
+			}
+			}
+		} while (!choice.equals("0"));
 	}
 	
 	private static boolean validateTrainId(String trainId) {
