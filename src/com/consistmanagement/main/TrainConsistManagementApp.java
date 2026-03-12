@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 8 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 9 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 8: Filter Passenger Bogies Using Streams
+ * Use Case 9: Filter Passenger Bogies Using Streams
  * 
  * Description: This class filters passenger bogies based on seating capacity using
  * a Java Streams API.
@@ -26,14 +26,14 @@ import java.util.stream.Collectors;
  * At this stage, the application:
  * 	- Creates a list of bogies.
  *  - Converts list into stream.
- *  - Applies filter condition
- *  - Collects filtered result
- *  - Displays qualifying result
+ *  - Groups bogies by name
+ *  - Stores grouped data in a map
+ *  - Displays grouped structure.	
  * 
- * This maps functional filtering using streams.
+ * This maps classification logic using groupingBy..
  * 
  * @author Developer
- * @version 8.0
+ * @version 9.0
  */
 
 public class TrainConsistManagementApp {
@@ -58,7 +58,7 @@ public class TrainConsistManagementApp {
 		
 	}
 	/**
-	 * Main entry point for UC6
+	 * Main entry point for UC9
 	 * 
 	 * @param args
 	 */
@@ -68,7 +68,11 @@ public class TrainConsistManagementApp {
 		System.out.println("======================================");
 
 		List<Bogie> bogies = new ArrayList<Bogie>();
-//		Map<String, Integer> capacityMap = new HashMap<String, Integer>();
+		bogies.add(new Bogie("Sleeper", 72));
+		bogies.add(new Bogie("AC Chair", 56));
+		bogies.add(new Bogie("First Class", 24));
+		bogies.add(new Bogie("Sleeper", 70));
+		bogies.add(new Bogie("AC Chair", 60));
 
 		System.out.println("Train initialized successfully.....");
 		System.out.println("Initial Bogie Count: " + bogies.size());
@@ -84,6 +88,7 @@ public class TrainConsistManagementApp {
 			System.out.println("4. Display Consists");
 			System.out.println("5. Sort Bogies");
 			System.out.println("6. Filter Bogies");
+			System.out.println("7. Group bogies");
 			System.out.println("0. Exit");
 			System.out.print("Enter your Choice: ");
 
@@ -97,7 +102,6 @@ public class TrainConsistManagementApp {
 					int capacity = scanner.nextInt();
 					scanner.nextLine();
 					bogies.add(new Bogie(bogie, capacity));
-//					capacityMap.put(bogie, capacity);
 					System.out.println(bogie + " with capacity " + capacity + " added successfully");
 				}
 				case "2" -> {
@@ -136,6 +140,16 @@ public class TrainConsistManagementApp {
 					System.out.println("Filtering Bogies with Capacity > 60: ");
 					for(Bogie b : bogies.stream().filter(b -> b.getCapacity() > 60).collect(Collectors.toList())) {
 						System.out.printf("%s -> %s\n", b.getName(), b.getCapacity());
+					}
+				}
+				case "7" -> {
+					Map<String, List<Bogie>> groupedBogies = bogies.stream().collect(Collectors.groupingBy(Bogie::getName));
+					System.out.println("Grouped bogies:");
+					for(Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+						System.out.println(entry.getKey() + ": ");
+						for(Bogie bogie : entry.getValue()) {
+							System.out.printf("Capacity: %s\n", bogie.getCapacity());
+						}
 					}
 				}
 				case "0" -> {
