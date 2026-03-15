@@ -17,34 +17,44 @@ import java.util.stream.Collectors;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 13 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 14 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 13: Performance Comparison (Loops vs Streams)
+ * Use Case 14: Handle Invalid Bogie Capacity (Custom Exception)
  * 
- * Description: This class compares execution time of loop-based filtering
- * versus stream-based filtering using System.nanoTime().
- * 
-* At this stage, the application:
- * - Creates goods test dataset
- * - Measures loop execution time
- * - Measures stream execution time
- * - Calculates elapsed duration
- * - Displays performance results
- * 
- * This maps real world cargo safety rules using Streams
+ * Description:
+ * This class prevents creation of passenger bogies
+ * with invalid seating capacity using a custom exception
  *  
+ * At this stage, the application:
+ * - Defines a custom exception
+ * - Validate capacity inside constructor
+ * - Throws exception is capacity <= 0
+ * - Prevents invalid bogie creation
+ * - Continues execution safely
+ * 
+ * This maps fail-fast validation using checked exceptions.
+ * 
  * @author Developer
- * @version 13.0
+ * @version 14.0
  */
 
 public class TrainConsistManagementApp {
+	
+	static class InvalidCapacityException extends Exception {
+		public InvalidCapacityException(String message) {
+			super(message);
+		}
+	}
 	
 	static class Bogie {
 		private String name;
 		private int capacity;
 		
-		public Bogie(String name, int capacity) {
+		public Bogie(String name, int capacity) throws InvalidCapacityException {
+			if (capacity <= 0) {
+				throw new InvalidCapacityException("Capacity should be greater than zero");
+			}
 			this.name = name;
 			this.capacity = capacity;
 		}
@@ -75,29 +85,16 @@ public class TrainConsistManagementApp {
 			return cargo;
 		}
 	}
-	/**
-	 * Main entry point for UC12
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		System.out.println("======================================");
-		System.out.println(" === Train Consist Management App === ");
-		System.out.println("======================================");
-
+	
+	private static void bogieConsist(Scanner scanner) throws InvalidCapacityException {
 		List<Bogie> bogies = new ArrayList<Bogie>();
 		bogies.add(new Bogie("Sleeper", 72));
 		bogies.add(new Bogie("AC Chair", 56));
 		bogies.add(new Bogie("First Class", 24));
 		bogies.add(new Bogie("Sleeper", 70));
 		bogies.add(new Bogie("AC Chair", 60));
-
-		System.out.println("Train initialized successfully.....");
-		System.out.println("Initial Bogie Count: " + bogies.size());
-
-		Scanner scanner = new Scanner(System.in);
+		
 		String choice;
-
 		do {
 			System.out.println();
 			System.out.println("1. Add Bogies");
@@ -193,6 +190,53 @@ public class TrainConsistManagementApp {
 					}
 				}
 				case "10" -> {
+					cargoTrain(scanner);
+				}
+				case "0" -> {
+					System.out.println("EXITING");
+				}
+				default -> {
+					System.out.println("Enter a valid choice");
+				}
+			}
+		} while (!choice.equals("0"));
+
+	}
+	
+	/**
+	 * Main entry point for UC14
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) throws Exception {
+		System.out.println("======================================");
+		System.out.println(" === Train Consist Management App === ");
+		System.out.println("======================================");
+
+
+
+		System.out.println("Train initialized successfully.....");
+
+		Scanner scanner = new Scanner(System.in);
+		String choice;
+
+		do {
+			System.out.println();
+			System.out.println("1. bogie consist");
+			System.out.println("2. Cargo train");
+			System.out.println("0. Exit");
+			System.out.print("Enter your Choice: ");
+
+			choice = scanner.nextLine();
+			switch (choice) {
+				case "1" -> {
+					try {
+						bogieConsist(scanner);
+					} catch (InvalidCapacityException e) {
+						System.out.println("Exception: " + e.getMessage());
+					}
+				}
+				case "2" -> {
 					cargoTrain(scanner);
 				}
 				case "0" -> {
