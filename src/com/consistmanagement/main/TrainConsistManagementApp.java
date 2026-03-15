@@ -1,6 +1,7 @@
 package com.consistmanagement.main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -20,23 +21,21 @@ import java.util.stream.Collectors;
  * MAIN CLASS - USE CASE 16 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 16: Sort Passenger Bogies by Capacity
+ * Use Case 17: Sort Bogie Names Using Arrays.sort()
  * 
  * Description:
- * This class demonstrates manual sorting of passenger bogie capacities using 
- * the Bubble Sort algorithm instead of built-in sorting utilities.
+ * This class demonstrates sorting of bogie type names
+ * alphabetically using Java;s built-in Arrays.sort() method.
  * 
  * At this stage, the application:
- * - Creates an array of capacities
- * - Compares adjacent values
- * - Swaps values when required
- * - Repeats passes until sorted
- * - Displays sorted result
+ * - Creates an array of bogie names
+ * - Uses Arrays.sort() for sorting
+ * - Displays sorted results
  * 
- * This maps algorithmic sorting logic using Bubble Sort.
+ * This maps optimized sorting using Java library utilities.
  * 
  * @author Developer
- * @version 16.0
+ * @version 17.0
  */
 
 public class TrainConsistManagementApp {
@@ -225,6 +224,19 @@ public class TrainConsistManagementApp {
 						System.out.print(c + " ");
 					}
 				}
+				case "11" -> {
+					String types[] = new String[bogies.size()];
+					
+					int idx = 0;
+					for(Bogie bogie : bogies) {
+						types[idx] = bogie.getName();
+						idx++;
+					}
+					
+					System.out.println("Original Bogie Names: \n" + Arrays.toString(types) + "\n");
+					Arrays.sort(types);
+					System.out.println("Sorted Bogie Names (Alphabetical): \n" + Arrays.toString(types) + "\n");
+				}
 				case "0" -> {
 					System.out.println("EXITING");
 				}
@@ -343,7 +355,7 @@ public class TrainConsistManagementApp {
 	
 	
 	/**
-	 * Main entry point for UC16
+	 * Main entry point for UC17
 	 * 
 	 * @param args
 	 */
