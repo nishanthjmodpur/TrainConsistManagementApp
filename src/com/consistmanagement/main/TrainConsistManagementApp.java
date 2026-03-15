@@ -47,6 +47,12 @@ public class TrainConsistManagementApp {
 		}
 	}
 	
+	static class CargoSafetyException extends RuntimeException {
+		public CargoSafetyException(String message) {
+			super(message);
+		}
+	}
+	
 	static class Bogie {
 		private String name;
 		private int capacity;
@@ -203,54 +209,7 @@ public class TrainConsistManagementApp {
 
 	}
 	
-	/**
-	 * Main entry point for UC14
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception {
-		System.out.println("======================================");
-		System.out.println(" === Train Consist Management App === ");
-		System.out.println("======================================");
-
-
-
-		System.out.println("Train initialized successfully.....");
-
-		Scanner scanner = new Scanner(System.in);
-		String choice;
-
-		do {
-			System.out.println();
-			System.out.println("1. bogie consist");
-			System.out.println("2. Cargo train");
-			System.out.println("0. Exit");
-			System.out.print("Enter your Choice: ");
-
-			choice = scanner.nextLine();
-			switch (choice) {
-				case "1" -> {
-					try {
-						bogieConsist(scanner);
-					} catch (InvalidCapacityException e) {
-						System.out.println("Exception: " + e.getMessage());
-					}
-				}
-				case "2" -> {
-					cargoTrain(scanner);
-				}
-				case "0" -> {
-					System.out.println("EXITING");
-				}
-				default -> {
-					System.out.println("Enter a valid choice");
-				}
-			}
-		} while (!choice.equals("0"));
-		scanner.close();
-	}
-	
-	private static void cargoTrain(Scanner scanner) {
+	private static void cargoTrain(Scanner scanner) throws CargoSafetyException {
 		List<GoodsBogie> goodsBogies = new ArrayList<TrainConsistManagementApp.GoodsBogie>();
 		
 		String choice;
@@ -325,6 +284,9 @@ public class TrainConsistManagementApp {
 				
 				System.out.println("Safety Complicance Status: " + isSafe);
 				System.out.println("Train formation is " + (isSafe ? "SAFE" : "NOT SAFE"));
+				if (!isSafe) {
+					throw new CargoSafetyException("Unsafe for Cargo Use");
+				}
 			}
 			}
 		} while (!choice.equals("0"));
@@ -350,5 +312,59 @@ public class TrainConsistManagementApp {
 			return true;
 		}
 		return false;
+	}
+	
+	
+	/**
+	 * Main entry point for UC14
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) throws Exception {
+		System.out.println("======================================");
+		System.out.println(" === Train Consist Management App === ");
+		System.out.println("======================================");
+
+
+
+		System.out.println("Train initialized successfully.....");
+
+		Scanner scanner = new Scanner(System.in);
+		String choice;
+
+		do {
+			System.out.println();
+			System.out.println("1. bogie consist");
+			System.out.println("2. Cargo train");
+			System.out.println("0. Exit");
+			System.out.print("Enter your Choice: ");
+
+			choice = scanner.nextLine();
+			switch (choice) {
+				case "1" -> {
+					try {
+						bogieConsist(scanner);
+					} catch (InvalidCapacityException e) {
+						System.out.println("Exception: " + e.getMessage());
+					}
+				}
+				case "2" -> {
+					try {
+						cargoTrain(scanner);					
+					} catch (CargoSafetyException e) {
+						System.out.println("Exception: " + e.getMessage());
+					} finally {
+						System.out.println("Cargo Safety check done");
+					}
+				}
+				case "0" -> {
+					System.out.println("EXITING");
+				}
+				default -> {
+					System.out.println("Enter a valid choice");
+				}
+			}
+		} while (!choice.equals("0"));
+		scanner.close();
 	}
 }
