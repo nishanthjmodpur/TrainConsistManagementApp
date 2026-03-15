@@ -21,21 +21,23 @@ import java.util.stream.Collectors;
  * MAIN CLASS - USE CASE 16 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 17: Sort Bogie Names Using Arrays.sort()
+ * Use Case 18: Linear Search for Bogie ID
  * 
  * Description:
- * This class demonstrates sorting of bogie type names
- * alphabetically using Java;s built-in Arrays.sort() method.
+ * This class demonstrates searching for a specific bogie ID
+ * using a simple Linear Seach Algorithm
  * 
  * At this stage, the application:
- * - Creates an array of bogie names
- * - Uses Arrays.sort() for sorting
- * - Displays sorted results
+ * - Creates an array of bogie IDs
+ * - Accepts a search key
+ * - Traverses array sequentially
+ * - Stops when match is found
+ * - Displays search result
  * 
- * This maps optimized sorting using Java library utilities.
+ * This maps basic searching logic using sequential traversal.
  * 
  * @author Developer
- * @version 17.0
+ * @version 18.0
  */
 
 public class TrainConsistManagementApp {
@@ -112,6 +114,7 @@ public class TrainConsistManagementApp {
 			System.out.println("8. Get total capacity");
 			System.out.println("9. validate Train ID and Cargo ID");
 			System.out.println("10. Sort Bogies using Bubble Sort");
+			System.out.println("12. Linear Search");
 			System.out.println("0. Exit");
 			System.out.print("Enter your Choice: ");
 
@@ -237,6 +240,31 @@ public class TrainConsistManagementApp {
 					Arrays.sort(types);
 					System.out.println("Sorted Bogie Names (Alphabetical): \n" + Arrays.toString(types) + "\n");
 				}
+				case "12" -> {
+					String[] bogieIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+					
+					System.out.print("Enter Bogie ID to Search: ");
+					String searchId = scanner.nextLine();
+					
+					System.out.println("Available Bogie IDs: ");
+					for(String id : bogieIds) {
+						System.out.println(id);
+					}
+					
+					boolean found = false;
+					for(String id : bogieIds) {
+						if(searchId.equals(id)) {
+							found = true;
+							break;
+						}
+					}
+					
+					if(found) {
+						System.out.printf("Bogie %s found in train consist\n", searchId);
+					}else {
+						System.out.printf("Bogie %s NOT found in train consist\n", searchId);
+					}
+				}
 				case "0" -> {
 					System.out.println("EXITING");
 				}
@@ -355,7 +383,7 @@ public class TrainConsistManagementApp {
 	
 	
 	/**
-	 * Main entry point for UC17
+	 * Main entry point for UC18
 	 * 
 	 * @param args
 	 */
