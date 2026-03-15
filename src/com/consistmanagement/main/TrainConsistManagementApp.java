@@ -17,26 +17,26 @@ import java.util.stream.Collectors;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 14 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 16 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 14: Handle Invalid Bogie Capacity (Custom Exception)
+ * Use Case 16: Sort Passenger Bogies by Capacity
  * 
  * Description:
- * This class prevents creation of passenger bogies
- * with invalid seating capacity using a custom exception
- *  
- * At this stage, the application:
- * - Defines a custom exception
- * - Validate capacity inside constructor
- * - Throws exception is capacity <= 0
- * - Prevents invalid bogie creation
- * - Continues execution safely
+ * This class demonstrates manual sorting of passenger bogie capacities using 
+ * the Bubble Sort algorithm instead of built-in sorting utilities.
  * 
- * This maps fail-fast validation using checked exceptions.
+ * At this stage, the application:
+ * - Creates an array of capacities
+ * - Compares adjacent values
+ * - Swaps values when required
+ * - Repeats passes until sorted
+ * - Displays sorted result
+ * 
+ * This maps algorithmic sorting logic using Bubble Sort.
  * 
  * @author Developer
- * @version 14.0
+ * @version 16.0
  */
 
 public class TrainConsistManagementApp {
@@ -112,6 +112,7 @@ public class TrainConsistManagementApp {
 			System.out.println("7. Group bogies");
 			System.out.println("8. Get total capacity");
 			System.out.println("9. validate Train ID and Cargo ID");
+			System.out.println("10. Sort Bogies using Bubble Sort");
 			System.out.println("0. Exit");
 			System.out.print("Enter your Choice: ");
 
@@ -196,7 +197,33 @@ public class TrainConsistManagementApp {
 					}
 				}
 				case "10" -> {
-					cargoTrain(scanner);
+					int capacities[] = new int[bogies.size()];
+					
+					int idx = 0;
+					for(Bogie b : bogies) {
+						capacities[idx] = b.getCapacity();
+						idx++;
+					}
+					
+					System.out.println("Original Capacity: ");
+					for (int c : capacities) {
+						System.out.print(c + " ");
+					}
+					
+					for(int i = 0; i < capacities.length - 1; i++) {
+						for(int j  = 0; j < capacities.length - i - 1; j++) {
+							if(capacities[i] > capacities[i + 1]) {
+								int temp = capacities[i];
+								capacities[i] = capacities[i + 1];
+								capacities[i + 1] = temp;
+							}
+						}
+					}
+					
+					System.out.println("Sorted Bogies (Ascending): ");
+					for (int c : capacities) {
+						System.out.print(c + " ");
+					}
 				}
 				case "0" -> {
 					System.out.println("EXITING");
@@ -316,7 +343,7 @@ public class TrainConsistManagementApp {
 	
 	
 	/**
-	 * Main entry point for UC14
+	 * Main entry point for UC16
 	 * 
 	 * @param args
 	 */
