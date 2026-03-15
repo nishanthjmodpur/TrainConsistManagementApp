@@ -17,24 +17,25 @@ import java.util.stream.Collectors;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 12 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 13 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 12: Safety Compliance Check for Goods Bogies
+ * Use Case 13: Performance Comparison (Loops vs Streams)
  * 
- * Description: This class enforces domain safety rules on goods bogies.
+ * Description: This class compares execution time of loop-based filtering
+ * versus stream-based filtering using System.nanoTime().
  * 
 * At this stage, the application:
- * - Creates goods bogie list
- * - Converts list into stream
- * - Applies safety validation rule
- * - Checks compliance using allMatch()
- * - Displays safety status
+ * - Creates goods test dataset
+ * - Measures loop execution time
+ * - Measures stream execution time
+ * - Calculates elapsed duration
+ * - Displays performance results
  * 
  * This maps real world cargo safety rules using Streams
  *  
  * @author Developer
- * @version 12.0
+ * @version 13.0
  */
 
 public class TrainConsistManagementApp {
@@ -262,7 +263,21 @@ public class TrainConsistManagementApp {
 				}
 			}
 			case "5" -> {
+				long streamStartTime = System.nanoTime();
 				boolean isSafe = goodsBogies.stream().allMatch(b -> b.getType().equalsIgnoreCase("Cylindrical") && b.getCargo().equalsIgnoreCase("Coal"));
+				long streamStopTime = System.nanoTime();
+				
+				long loopStartTime = System.nanoTime();
+				for (GoodsBogie g : goodsBogies) {
+					if (g.getType().equalsIgnoreCase("Cylindrical") && g.getCargo().equalsIgnoreCase("Coal")) {
+						isSafe = false;
+						break;
+					}
+				}
+				long loopEndTime = System.nanoTime();
+				
+				System.out.println("Loop: " + (loopEndTime - loopStartTime));
+				System.out.println("Stream: " + (streamStopTime - streamStartTime));
 				
 				System.out.println("Safety Complicance Status: " + isSafe);
 				System.out.println("Train formation is " + (isSafe ? "SAFE" : "NOT SAFE"));
