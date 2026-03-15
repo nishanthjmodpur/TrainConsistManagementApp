@@ -18,26 +18,26 @@ import java.util.stream.Collectors;
 
 /**
  * =================================================================================
- * MAIN CLASS - USE CASE 19 - TRAIN CONSIST MANAGEMENT APP
+ * MAIN CLASS - USE CASE 20 - TRAIN CONSIST MANAGEMENT APP
  * =================================================================================
  * 
- * Use Case 19: Binary Search for Bogie ID
+ * Use Case 20: Exception Handling During Search Operations
  * 
  * Description:
- * This class demonstrates searching for a specific bogie ID
- * using the Binary Search algorithm on sorted data.
+ * This class prevents searching when no bogies exist
+ * by applying fail-fast validation using exceptions.
  * 
  * At this stage, the application:
- * - Creates an array of bogie IDs
- * - Accepts a search key
- * - Applies binary search logic
- * - Narrows search range each iteration
- * - Displays results
+ * - Creates bogie collection
+ * - Validates system state
+ * - Throws exception if empty
+ * - Stops invalid search operation
+ * - Displays meaningful message
  * 
- * This maps optimized searching logic using divide-and-conquer
+ * This maps defensive programming using runtime exceptions.
  * 
  * @author Developer
- * @version 19.0
+ * @version 20.0
  */
 
 public class TrainConsistManagementApp {
@@ -50,6 +50,12 @@ public class TrainConsistManagementApp {
 	
 	static class CargoSafetyException extends RuntimeException {
 		public CargoSafetyException(String message) {
+			super(message);
+		}
+	}
+	
+	static class IllegalStateException extends RuntimeException {
+		public IllegalStateException(String message) {
 			super(message);
 		}
 	}
@@ -93,7 +99,7 @@ public class TrainConsistManagementApp {
 		}
 	}
 	
-	private static void bogieConsist(Scanner scanner) throws InvalidCapacityException {
+	private static void bogieConsist(Scanner scanner) throws InvalidCapacityException, IllegalStateException {
 		List<Bogie> bogies = new ArrayList<Bogie>();
 		bogies.add(new Bogie("Sleeper", 72));
 		bogies.add(new Bogie("AC Chair", 56));
@@ -268,6 +274,10 @@ public class TrainConsistManagementApp {
 				}
 				case "13" -> {
 					String[] bogieIds = {"BG101", "BG205", "BG309", "BG412", "BG550"};
+					
+					if (bogieIds.length == 0) {
+						throw new IllegalStateException("No bogies exist");
+					}
 					
 					System.out.print("Enter Bogie ID to Search: ");
 					String searchId = scanner.nextLine();
